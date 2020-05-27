@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:p="http://www.springframework.org/schema/p"
+	   xmlns:c="http://www.springframework.org/schema/c"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="startFile" class="com.example.demo.factory.ResourceFactory"
+		  p:fileName="log/tag_read_start.log"
+	/>
+	<bean id="finishFile" class="com.example.demo.factory.ResourceFactory"
+		  p:fileName="log/tag_reads_finish.log"
+	/>
+
+	<bean id="startLog" class="java.io.FileInputStream"
+		  c:file-ref="startFile"
+		  scope="prototype"
+	/>
+
+	<bean id="finishLog" class="java.io.FileInputStream"
+		  c:file-ref="finishFile"
+		  scope="prototype"
+	/>
+
+	<bean id="parseStartFile" class="com.example.demo.service.ParseServiceImpl"
+		  p:source-ref="startLog"
+		  scope="prototype"
+	/>
+	<bean id="parseFinishFile" class="com.example.demo.service.ParseServiceImpl"
+		  p:source-ref="finishLog"
+		  scope="prototype"
+	/>
+
+	<bean id="parseController" class="com.example.demo.controller.ParseController"
+		scope="prototype"
+	/>
+
+	<bean id="userServiceImpl" class="com.example.demo.service.UserServiceImpl"
+		  c:start-ref="parseStartFile"
+		  c:end-ref="parseFinishFile"
+		  scope="prototype"/>
+</beans>
