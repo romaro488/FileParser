@@ -1,7 +1,5 @@
 package com.example.demo.service;
 
-import com.example.demo.service.ParseService;
-import com.example.demo.service.UserService;
 import com.example.demo.utils.TimeUtils;
 import com.example.demo.utils.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +8,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,12 +31,12 @@ public class ParseServiceImpl implements ParseService<List<Tuple<String, Date>>>
 		this.stream = inputStream;
 	}
 
-	public List<Tuple<String, Date>> findChampions() {
+	public List<Tuple<String, ZonedDateTime>> findChampions() {
 
 		if (stream == null) {
 			throw new IllegalArgumentException("source has to be set");
 		}
-		List<Tuple<String, Date>> participants = new LinkedList<>();
+		List<Tuple<String, ZonedDateTime>> participants = new LinkedList<>();
 		try (Stream<String> lines = new BufferedReader(new InputStreamReader(stream)).lines()) {
 			lines.forEach(line -> {
 				parseInput(line).ifPresent(participants::add);
@@ -48,14 +47,14 @@ public class ParseServiceImpl implements ParseService<List<Tuple<String, Date>>>
 		return participants;
 	}
 
-	public Optional<Tuple<String, Date>> parseInput(String input) {
+	public Optional<Tuple<String, ZonedDateTime>> parseInput(String input) {
 		String userId = input.substring(TAG_STARTS_AT, TAG_ENDS_AT);
 		String time = input.substring(TIMESTAMP_STARTS_AT, TIMESTAMP_ENDS_AT);
 
-		Optional<Date> date = TimeUtils.formatDateTime(time);
+		Optional<ZonedDateTime> date = TimeUtils.formatDateTime(time);
 
 		return date.map(e -> {
-			Tuple<String, Date> tuple = new Tuple<>();
+			Tuple<String, ZonedDateTime> tuple = new Tuple<>();
 			tuple.first = userId;
 			tuple.second = e;
 

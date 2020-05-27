@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
-
+import java.time.ZonedDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,15 +12,7 @@ import java.util.Date;
 public class User {
 
 	private String id;
-	private Date startDate;
-	private Date endDate;
-
-	public Date getStartDate() {
-		return new Date(startDate.getTime());
-	}
-
-	public Date getEndDate() {
-		return new Date(endDate.getTime());
-	}
+	private ZonedDateTime startDate;
+	private ZonedDateTime endDate;
 }
 

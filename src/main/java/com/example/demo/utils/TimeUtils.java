@@ -1,18 +1,20 @@
 package com.example.demo.utils;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+
+import static com.example.demo.utils.Constants.NEW_YOK_ZONE_ID;
 
 public class TimeUtils {
 
-	public static Optional<Date> formatDateTime(String time) {
-		SimpleDateFormat dateTimeFormatter = new SimpleDateFormat("yyMMddHHmmss");
 
+	public static Optional<ZonedDateTime> formatDateTime(String time) {
 		try {
-			Date parse = dateTimeFormatter.parse(time);
-
-			return Optional.of(parse);
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyMMddHHmmss")
+					.withZone(NEW_YOK_ZONE_ID);
+			ZonedDateTime dateTime = ZonedDateTime.parse(time, dateTimeFormatter);
+			return Optional.of(dateTime);
 		} catch (Exception e) {
 			return Optional.empty();
 		}
